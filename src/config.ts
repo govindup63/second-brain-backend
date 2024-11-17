@@ -1,1 +1,7 @@
-export const contentType = ['link', 'video', 'image', 'article', 'audio'] as const
+export const contentType = [
+  "tweet",
+  "video",
+  "image",
+  "article",
+  "audio",
+] as const;

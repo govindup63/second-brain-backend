@@ -28,21 +28,21 @@ const mongoose_1 = __importStar(require("mongoose"));
 const config_1 = require("./config");
 const UserSchema = new mongoose_1.Schema({
     username: { type: String, unique: true },
-    password: String
+    password: String,
 });
 const ContentSchema = new mongoose_1.Schema({
     title: { type: String, required: true },
     type: { type: String, enum: config_1.contentType, required: true },
     link: { type: String, required: true },
-    tags: [{ type: mongoose_1.default.Types.ObjectId, required: true, ref: 'Tags' }],
-    userId: { type: mongoose_1.default.Types.ObjectId, required: true, ref: 'User' }
+    tags: [{ type: mongoose_1.default.Types.ObjectId, required: true, ref: "Tags" }],
+    userId: { type: mongoose_1.default.Types.ObjectId, required: true, ref: "User" },
 });
 const TagsSchema = new mongoose_1.Schema({
-    title: { type: String, required: true, unique: true }
+    title: { type: String, required: true, unique: true },
 });
 const LinkSchema = new mongoose_1.Schema({
     hash: { type: String, required: true, unique: true },
-    userId: { type: mongoose_1.default.Types.ObjectId, required: true, ref: 'User' }
+    userId: { type: mongoose_1.default.Types.ObjectId, required: true, ref: "User" },
 });
 exports.UserModel = mongoose_1.default.model("User", UserSchema);
 exports.ContentModel = mongoose_1.default.model("Content", ContentSchema);

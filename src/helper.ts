@@ -4,7 +4,6 @@ import axios from "axios";
 import { z } from "zod";
 import dotenv from "dotenv";
 import * as cheerio from "cheerio";
-import test from "node:test";
 dotenv.config();
 
 const envBody = z.object({
@@ -103,7 +102,7 @@ export async function getTweetData(tweetUrl: string): Promise<string> {
     if (!response.data.data || !response.data.data.text) {
       throw new Error("Invalid tweet data or no text content available");
     }
-
+    console.log(response.data.data.text);
     return response.data.data.text;
   } catch (error: any) {
     console.error("Error fetching tweet data:", error.message);
@@ -111,7 +110,15 @@ export async function getTweetData(tweetUrl: string): Promise<string> {
   }
 }
 
-async function getArticleData(articleUrl: string): Promise<string> {
+// async function test() {
+//   const res = await getTweetData(
+//     "https://x.com/ReheSamay/status/1858294904084103658",
+//   );
+//   console.log(res);
+// }
+// test();
+
+export async function getArticleData(articleUrl: string): Promise<string> {
   try {
     // Perform the HTTP request
     const response = await axios.get(articleUrl);

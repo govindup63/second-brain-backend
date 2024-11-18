@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import z from "zod";
 
@@ -9,7 +9,11 @@ const envSchema = z.object({
 const env = envSchema.parse(process.env);
 
 // Middleware to authenticate and attach userId
-export const userMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+export const userMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
   const header = req.headers["authorization"];
 
   // Check if the authorization header is provided
@@ -17,7 +21,7 @@ export const userMiddleware = (req: Request, res: Response, next: NextFunction):
     res.status(403).json({
       message: "You are not logged in! Authentication failed.",
     });
-    return
+    return;
   }
 
   try {

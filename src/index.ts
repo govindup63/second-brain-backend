@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express from "express";
+import express, { query } from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import z from "zod";
@@ -14,6 +14,8 @@ import { userMiddleware } from "./middleware";
 import { contentType } from "./config";
 import { getTagsByIdshelper, tagHelper } from "./helper";
 import { Pinecone } from "@pinecone-database/pinecone";
+import { processLink, queryEmbedding } from "./embeddings";
+import { warn } from "console";
 
 const model = "multilingual-e5-large";
 
@@ -131,10 +133,16 @@ app.post("/api/v1/content", userMiddleware, async (req, res) => {
       tags: tagIds,
       userId: req.userId,
     });
-    console.log(content);
-    res.status(200).json({
-      message: "your content is added succesfully",
-    });
+    if (req.userId) {
+      processLink(link, type, title, content._id, req.userId);
+      res.status(200).json({
+        message: "your content is added succesfully",
+      });
+    } else {
+      res.status(403).json({
+        message: "req.userId not available",
+      });
+    }
     return;
   } catch (e) {
     console.error("error uploading content to db: \n" + e);
@@ -312,13 +320,32 @@ app.get("/api/v1/brain/:shareLink", userMiddleware, async (req, res) => {
   }
 });
 
+app.post("/api/v1/brain/ask", userMiddleware, async (req, res) => {
+  const requredBody = z.object({
+    query: z.string(),
+  });
+  const parsedCorrectly = requredBody.safeParse(req.body);
+  if (!parsedCorrectly.success) {
+    res.status(403).json({
+      message: "input format wrong",
+    });
+    return;
+  }
+  const { query } = req.body;
+  if (req.userId) {
+    const topResults = await queryEmbedding(query, req.userId);
+    res.json({
+      topResults,
+    });
+  } else {
+    console.log("userId does not exist");
+  }
+});
+
 async function main() {
   await mongoose.connect(env.MONGO_URL);
   app.listen(3000, () => {
     console.log("server running on port 3000");
-  });
-  const pc = new Pinecone({
-    apiKey: env.PINECONE_API_KEY,
   });
 }
 main();

@@ -1,6 +1,6 @@
 export const contentType = [
   "tweet",
-  "video",
+  "youtube",
   "image",
   "article",
   "audio",

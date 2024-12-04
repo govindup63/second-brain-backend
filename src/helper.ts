@@ -73,7 +73,7 @@ export async function getYoutubeData(videoUrl: string): Promise<string> {
   }
 
   const video = response.data.items[0].snippet;
-  return `${video.title}. ${video.description}`;
+  return ` ${video.channelTitle}. ${video.title}.`;
 }
 
 function extractTweetId(url: string): string {
@@ -102,7 +102,6 @@ export async function getTweetData(tweetUrl: string): Promise<string> {
     if (!response.data.data || !response.data.data.text) {
       throw new Error("Invalid tweet data or no text content available");
     }
-    console.log(response.data.data.text);
     return response.data.data.text;
   } catch (error: any) {
     console.error("Error fetching tweet data:", error.message);

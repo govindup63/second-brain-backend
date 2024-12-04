@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import express, { query } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import z from "zod";
@@ -13,9 +13,7 @@ import { ContentModel, LinkModel, UserModel } from "./db";
 import { userMiddleware } from "./middleware";
 import { contentType } from "./config";
 import { getTagsByIdshelper, tagHelper } from "./helper";
-import { Pinecone } from "@pinecone-database/pinecone";
 import { processLink, queryEmbedding } from "./embeddings";
-import { warn } from "console";
 
 const model = "multilingual-e5-large";
 

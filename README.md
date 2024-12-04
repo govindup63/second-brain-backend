@@ -83,7 +83,7 @@ Second Brain API is a backend service for managing and querying a personal conte
 - **Request Body**:
   ```json
   {
-    "status": true|false
+    "status": boolean
   }
   ```
   
